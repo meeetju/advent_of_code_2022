@@ -7,12 +7,16 @@ fn main() {
 
     let mut marker: Vec<char> = vec![];
 
+    const PACKET_MARKER_SIZE: usize = 4;
+    const MESSAGE_MARKER_SIZE: usize = 14;
+
     if let Ok(lines) = read_lines("./communicates.txt") {
         for line in lines {
             if let Ok(value) = line {
                 println!("{}", value);
                 for (i, c) in value.chars().enumerate() {
-                    if marker.len() == 4{
+                    // if marker.len() == PACKET_MARKER_SIZE {
+                    if marker.len() == MESSAGE_MARKER_SIZE {
                         marker.pop();
                         marker.insert(0, c);
 
@@ -31,7 +35,6 @@ fn main() {
                     } else {
                         marker.insert(0, c);
                     }
-                        
                 }
             }
         }
