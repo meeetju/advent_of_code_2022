@@ -27,7 +27,12 @@ const UP: &str = "U";
 const RIGHT: &str = "R";
 const DOWN: &str = "D";
 
-const NUM_OF_KNOTS: usize = 2;
+// Part 1
+// const NUM_OF_KNOTS: usize = 2;
+// const SOURCE_FILE: &str = "./steps.txt";
+// Part 2
+const NUM_OF_KNOTS: usize = 10;
+const SOURCE_FILE: &str = "./steps_2.txt";
 
 fn main() {
 
@@ -40,11 +45,10 @@ fn main() {
     let mut last_knot_positions: HashSet<(i32, i32)> = HashSet::new();
     last_knot_positions.insert((knots.last().unwrap().x_position, knots.last().unwrap().y_position));
 
-    if let Ok(lines) = read_lines("./steps_debug_2.txt") {
+    if let Ok(lines) = read_lines(SOURCE_FILE) {
         for line in lines {
             if let Ok(value) = line {
                 let new_move: Vec<&str> = value.split(" ").into_iter().collect();
-                // dbg!(&new_move);
                 let direction = new_move[0];
                 let distance_steps = new_move[1];
 
@@ -60,9 +64,9 @@ fn main() {
                         
                     }
 
-                    for index in 1..knots.len().clone() {
+                    for index in 1..knots.len() {
 
-                        if knots[index].is_stretched_from(&knots[0]) {
+                        if knots[index].is_stretched_from(&knots[index-1]) {
                             // Same horizontally
                             if knots[index].y_position == knots[index-1].y_position {
                                 if knots[index].x_position < knots[index-1].x_position {
@@ -79,30 +83,28 @@ fn main() {
                                     knots[index].y_position -= 1;
                                 }
                             }
-                            // Head is Right Top
+                            // Previous is Right Top
                             if knots[index].x_position < knots[index-1].x_position && knots[index].y_position < knots[index-1].y_position {
                                 knots[index].x_position += 1;
                                 knots[index].y_position += 1;
                             }
-                            // Head is Left Top
+                            // Previous is Left Top
                             if knots[index].x_position > knots[index-1].x_position && knots[index].y_position < knots[index-1].y_position {
                                 knots[index].x_position -= 1;
                                 knots[index].y_position += 1;
                             }
-                            // Head is Right Down
+                            // Previous is Right Down
                             if knots[index].x_position < knots[index-1].x_position && knots[index].y_position > knots[index-1].y_position {
                                 knots[index].x_position += 1;
                                 knots[index].y_position -= 1;
                             }
-                            // Head is Left Down
+                            // Previous is Left Down
                             if knots[index].x_position > knots[index-1].x_position && knots[index].y_position > knots[index-1].y_position {
                                 knots[index].x_position -= 1;
                                 knots[index].y_position -= 1;
                             }
-                            if index == (knots.len() -1) {
-                                last_knot_positions.insert((knots.last().unwrap().x_position, knots.last().unwrap().y_position));
-                            }
                         }
+                        last_knot_positions.insert((knots.last().unwrap().x_position, knots.last().unwrap().y_position));
                     }
                 }
             }
